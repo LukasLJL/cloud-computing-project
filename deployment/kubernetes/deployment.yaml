@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hugo-www-app
+  namespace: cloud-computing
+  labels:
+    app: hugo-www-app
+    namespace: cloud-computing
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: hugo-www-app
+  template:
+    metadata:
+      labels:
+        app: hugo-www-app
+        namespace: cloud-computing
+    spec:
+      containers:
+      - name: hugo-www-app
+        image: ghcr.io/lukasljl/cloud-computing-project:latest
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 80
+            protocol: TCP
