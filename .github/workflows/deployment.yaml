@@ -15,6 +15,10 @@ jobs:
         with: 
           submodules: true
 
+      - name: Set SHA-Commit Tag
+        id: sha
+        run: echo ::set-output name=commit_hash::${GITHUB_SHA::8}
+
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
@@ -35,7 +39,9 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/lukasljl/cloud-computing-project:${{ github.sha }}
+          tags: |
+            ghcr.io/lukasljl/cloud-computing-project:${{ steps.sha.outputs.commit_hash }}
+            ghcr.io/lukasljl/cloud-computing-project:latest
           labels: LukasLJL/cloud-computing-project
 
   deploy:
