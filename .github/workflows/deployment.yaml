@@ -35,7 +35,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/lukasljl/cloud-computing-project, ${{ github.sha }}
+          tags: ghcr.io/lukasljl/cloud-computing-project:${{ github.sha }}
           labels: LukasLJL/cloud-computing-project
 
   deploy:
