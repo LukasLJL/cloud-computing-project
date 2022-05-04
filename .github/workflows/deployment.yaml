@@ -47,8 +47,12 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+    - name: Set SHA-Commit Tag
+      id: sha
+      run: echo ::set-output name=commit_hash::${GITHUB_SHA::8}
+
     - name: deploy to cluster
       uses: steebchen/kubectl@v2.0.0
       with:
         config: ${{ secrets.KUBE_CONFIG_DATA }}
-        command: set image --record deployment/hugo-www-app -n cloud-computing container=${{ github.repository }}:${{ github.sha }}
+        command: set image --record deployment/hugo-www-app -n cloud-computing hugo-www-app=ghcr.io/lukasljl/cloud-computing-project:${{ steps.sha.outputs.commit_hash }}

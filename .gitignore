@@ -4,3 +4,5 @@ deployment/terraform/.terraform.lock.hcl
 deployment/terraform/.terraform.tfstate.lock.info
 deployment/terraform/terraform.tfstate
 deployment/terraform/terraform.tfstate.backup
+deployment/terraform/kube-config.yaml
+kube-config.yaml
