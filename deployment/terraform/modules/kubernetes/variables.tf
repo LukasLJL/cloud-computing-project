@@ -1,0 +1,3 @@
+variable "loadBalancerIP" {
+  type = string
+}

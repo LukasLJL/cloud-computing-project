@@ -1,0 +1,70 @@
+image:
+  name: traefik
+  tag: "2.6"
+  pullPolicy: IfNotPresent
+
+additionalArguments:
+  - --certificatesresolvers.myresolver.acme.tlschallenge=true
+  - --certificatesresolvers.myresolver.acme.email=admin@leucali.net
+  - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
+  - --entrypoints.websecure.http.tls.certresolver=myresolver
+  - --providers.kubernetesingress.ingressclass=traefik-external
+  - --global.sendAnonymousUsage=false
+#  - --log.level=DEBUG
+
+deployment:
+  enabled: true
+  kind: Deployment
+  replicas: 1
+  annotations: {}
+  podAnnotations: {}
+  additionalContainers: []
+
+ports:
+  web:
+    port: 8000
+    expose: true
+    exposedPort: 80
+    protocol: TCP
+    redirectTo: websecure
+  websecure:
+    port: 8443
+    expose: true
+    exposedPort: 443
+    protocol: TCP
+    tls:
+      enabled: true
+      certResolver: "myresolver"
+
+ingressRoute:
+  dashboard:
+    enabled: false
+
+persistence:
+  enabled: true
+  size: 256Mi
+  path: /letsencrypt
+
+providers:
+  kubernetesCRD:
+    enabled: true
+    namespaces: []
+  kubernetesIngress:
+    enabled: true
+    namespaces: []
+    publishedService:
+      enabled: true
+
+rbac:
+  enabled: true
+
+service:
+  enabled: true
+  type: LoadBalancer
+  annotations: {}
+  labels: {}
+  spec:
+    externalTrafficPolicy: Cluster
+    loadBalancerIP: "193.196.52.219"
+  loadBalancerSourceRanges: []
+  externalIPs: []

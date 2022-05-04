@@ -1,0 +1,60 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: whoami-ingress
+  namespace: default
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`whoami.hugo.lukasljl.de`)
+    kind: Rule
+    services:
+        - name: whoami-service
+          namespace: default
+          port: 80
+  tls:
+    certResolver: myresolver
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: whoami-service
+  namespace: default
+  labels:
+    run: whoami-app
+    namespace: default
+spec:
+  selector:
+    app: whoami-app
+    namespace: default
+  ports:
+    - protocol: TCP
+      port: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whoami-app
+  namespace: default
+  labels:
+    app: whoami-app
+    namespace: default
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: whoami-app
+  template:
+    metadata:
+      labels:
+        app: whoami-app
+        namespace: default
+    spec:
+      containers:
+        - name: whoami-app
+          image: traefik/whoami
+          ports:
+            - containerPort: 80
+              protocol: TCP
