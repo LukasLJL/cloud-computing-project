@@ -5,7 +5,7 @@ author: "Me"
 tags: ["blog", "tech", "github", "ci/cd"]
 categories: ["hugo", "blog"]
 description: "This is a description text for Post with Github-Actions"
-draft: true
+draft: false
 ShowToc: true
 disableHLJS: false
 hideSummary: false
@@ -16,3 +16,4 @@ ShowPostNavLinks: true
 ShowRssButtonInSectionTermList: true
 ---
 If everything is working correctly this post, should just go online with help of the ci/cd pipeline lel.
+Edit: ...you should also remove the draft flag
