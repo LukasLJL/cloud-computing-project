@@ -6,7 +6,7 @@ The Project contains a basic Hugo Website with a CI/CD Pipeline and a Terraform 
 This Website uses the [PaperMod](https://github.com/adityatelange/hugo-PaperMod) Theme.
 
 ### Usage
-To start the Website locally run ``hugo Server -D`` <br>
+To start the Website locally run ``hugo server -D`` <br>
 If you want to create new post run ``hugo new --kind post posts/my_new_post.md``
 
 ### Deployment
