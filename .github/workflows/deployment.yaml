@@ -3,8 +3,6 @@ name: CI/CD-Pipeline
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
 
 jobs:
   build:
@@ -45,6 +43,7 @@ jobs:
           labels: LukasLJL/cloud-computing-project
 
   deploy:
+    needs: build
     runs-on: ubuntu-latest
     steps:
     - name: Set SHA-Commit Tag
