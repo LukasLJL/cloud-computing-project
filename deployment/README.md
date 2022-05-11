@@ -24,3 +24,10 @@ Now you should be able to just use terraform, here is quick setup guide
 - ``terraform destroy`` - deletes the k3s cluster and all instances.
 
 The Terraform script creates 3 instances one for the master-node and 2 for regular-nodes. The Master-Node has more Ressource because it has to manage the k3s cluster.
+
+## Adding Kubernetes Config File
+To add the Kubernetes Config file to a github secret run ``cat ./terraform/kube-config.yaml | base64``
+
+## Managing Kubernetes & Add whoami deployment
+You have to add the ``./terraform/kube-config.yaml`` to your default kubeconfig or use something like this ``export KUBECONFIG=~/.kube/kube-config.yaml``
+After that you can run ``kubectl apply -f ./deployments/whoami.yaml``, you may have to change the url in this file.

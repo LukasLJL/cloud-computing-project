@@ -48,7 +48,7 @@ variable "ccp_api_password" {
 
 module "infra" {
   source      = "./modules/infra"
-  private_key_path = "~/.ssh/id_rsa.pub"
+  private_key_path = "~/.ssh/id_rsa"
   public_key_path = "~/.ssh/id_rsa.pub"
 }
 
