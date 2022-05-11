@@ -24,3 +24,37 @@ spec:
         ports:
           - containerPort: 80
             protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hugo-www-service
+  namespace: cloud-computing
+  labels:
+    app: hugo-www-app
+    namespace: cloud-computing
+spec:
+  selector:
+    app: hugo-www-app
+    namespace: cloud-computing
+  ports:
+    - protocol: TCP
+      port: 80
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: hugo-www-ingress
+  namespace: cloud-computing
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`hugo.lukasljl.de`)
+    kind: Rule
+    services:
+        - name: hugo-www-service
+          namespace: cloud-computing
+          port: 80
+  tls:
+    certResolver: myresolver

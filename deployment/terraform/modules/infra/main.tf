@@ -1,7 +1,3 @@
-/*
-* Module for Basic Infrastucture like SSH-Keys, Intances etc.
-*/
-
 terraform {
   required_version = ">= 1.1.7"
   required_providers {
@@ -43,7 +39,7 @@ resource "random_password" "k3s_token" {
 #SSH-Key
 resource "openstack_compute_keypair_v2" "ssh_key" {
   name       = "ssh-key-cc"
-  public_key = var.public_key
+  public_key = file(var.public_key_path)
 }
 
 #Port Config for HTTP/S
@@ -104,7 +100,7 @@ resource "null_resource" "k3s-master-setup" {
     host        = openstack_compute_instance_v2.worker["srv-01"].access_ip_v4
     user        = "ubuntu"
     port        = 22
-    private_key = var.private_key
+    private_key = file(var.private_key_path)
   }
 
   provisioner "remote-exec" {
@@ -127,7 +123,7 @@ resource "null_resource" "k3s-node-setup" {
     host        = each.value.access_ip_v4
     user        = "ubuntu"
     port        = 22
-    private_key = var.private_key
+    private_key = file(var.private_key_path)
   }
 
   provisioner "remote-exec" {
@@ -141,7 +137,7 @@ resource "null_resource" "k3s-node-setup" {
 resource "null_resource" "k3s-copy-config" {
   depends_on = [null_resource.k3s-master-setup]
   provisioner "local-exec" {
-    command = "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/.ssh/id_rsa ubuntu@${openstack_compute_instance_v2.worker["srv-01"].access_ip_v4}:/etc/rancher/k3s/k3s.yaml kube-config.yaml"
+    command = "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${var.private_key_path} ubuntu@${openstack_compute_instance_v2.worker["srv-01"].access_ip_v4}:/etc/rancher/k3s/k3s.yaml kube-config.yaml"
   }
   provisioner "local-exec" {
     command = "sed -i 's/127.0.0.1/${openstack_compute_instance_v2.worker["srv-01"].access_ip_v4}/g' kube-config.yaml"

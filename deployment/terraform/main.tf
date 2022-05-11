@@ -19,7 +19,6 @@ terraform {
 /*
 * Provider Configuration
 */
-
 provider "openstack" {
   cloud = "openstack"
 }
@@ -35,17 +34,29 @@ provider "helm" {
   }
 }
 
+variable "ccp_number" {
+  type = number
+}
+
+variable "ccp_api_key" {
+  type = string
+}
+
+variable "ccp_api_password" {
+  type = string
+}
+
 module "infra" {
   source      = "./modules/infra"
-  public_key  = file("~/.ssh/id_rsa.pub")
-  private_key = file("~/.ssh/id_rsa")
+  private_key_path = "~/.ssh/id_rsa.pub"
+  public_key_path = "~/.ssh/id_rsa.pub"
 }
 
 module "netcup" {  
   source           = "./modules/netcup"
-  ccp_number       = var.ccp_number
-  ccp_api_key      = "${var.ccp_api_key}"
-  ccp_api_password = "${var.ccp_api_pw}"
+  ccp_number        = var.ccp_number
+  ccp_api_key       = var.ccp_api_key
+  ccp_api_password  = var.ccp_api_password
   domain           = "lukasljl.de"
   subdoamin        = ["*.hugo", "hugo"]
   server_ip        = module.infra.master_ip
