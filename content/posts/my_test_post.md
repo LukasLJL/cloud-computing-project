@@ -5,7 +5,7 @@ author: "Me"
 tags: ["blog", "tech"]
 categories: ["hugo", "blog", "personal"]
 description: "This is a description text for a test post"
-draft: true
+draft: false
 ShowToc: true
 disableHLJS: false
 hideSummary: false
